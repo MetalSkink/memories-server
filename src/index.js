@@ -3,11 +3,10 @@ import express from "express";
 import cors from "cors";
 import 'dotenv/config';
 
-import postRoutes from "./routes/posts.js";
+import postRoutes from "./routes/posts.route.js";
 
 const app = express();
 
-app.use('/posts', postRoutes);
 
 app.use(express.json({ limit: "50mb",extended: true }));
 app.use(express.urlencoded({ limit: "30mb",extended: true }));
@@ -15,6 +14,7 @@ app.use(cors());
 
 const PORT = process.env.PORT || 5000;
 
+app.use('/posts', postRoutes);
 //Conecction to DB
 mongoose.connect(process.env.BD_CNN, {
     useNewUrlParser: true,
