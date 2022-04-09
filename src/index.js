@@ -3,7 +3,8 @@ import express from "express";
 import cors from "cors";
 import 'dotenv/config';
 
-import postRoutes from "./routes/posts.route.js";
+import postRoutes from "./routes/posts.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cors());
 const PORT = process.env.PORT || 5000;
 
 app.use('/posts', postRoutes);
+app.use('/user', userRoutes);
 //Conecction to DB
 mongoose.connect(process.env.BD_CNN, {
     useNewUrlParser: true,
