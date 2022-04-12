@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { generateJWT } from '../helpers/generateJWT.js';
 import User from '../models/user.js';
 
 export const signin = async (req, res) => {
@@ -14,12 +15,9 @@ export const signin = async (req, res) => {
       if (!isMatch) {
         return res.status(404).json({ msg: 'Invalid Credentials' });
       }
-      const token = jwt.sign({
-        email: user.email,
-        id: user._id,
-      }, process.env.SECRET_JWT_SEED, {
-        expiresIn: '1h',
-      })
+      const token = await generateJWT(user._id, user.email);
+
+      user.password= undefined;
 
       res.status(200).json({
         result: user,
@@ -48,12 +46,9 @@ export const signup = async (req, res) => {
       name: `${firstName} ${lastName}`
     });
 
-    const token = jwt.sign({
-      email: result.email,
-      id: result._id,
-    }, process.env.SECRET_JWT_SEED, {
-      expiresIn: '1h',
-    })
+    result.password = undefined;
+
+    const token = await generateJWT(result._id, result.email);
 
     res.status(200).json({
       result,

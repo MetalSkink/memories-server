@@ -2,15 +2,14 @@ import jwt from 'jsonwebtoken';
 
 const auth = async(req, res, next) => {
   try {
-    const token = req.headres.authorization.split(' ')[1];
-    const isCustomAuth = token.lenth < 500;
-
+    const token = req.headers.authorization.split(' ')[1]; //Le quita la plabra Bearer
+    const isCustomAuth = token.length < 500;
     let decodedData ;
 
     if (token && isCustomAuth) {
       decodedData = jwt.verify(token, process.env.SECRET_JWT_SEED);
       
-      req.userId = decodedData?.id;
+      req.userId = decodedData?.userId;
     } else {
       decodedData = jwt.decode(token);
       
